@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph author="rupesh" created="Thu Dec 12 00:02:20 PST 2013" guiVersion="3.4.0.P" id="1388765957283" licenseCode="Unlicensed" licenseType="Unknown" modified="Thu Dec 12 00:02:20 PST 2013" modifiedBy="rupesh" name="new_mapping_1_grf" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Ship" _dataStructure="OBJECT" _id="__id" _type="Output" id="ed89c4d4-7d8d-4ef5-9f91-0f87d6ab8292">
+<Record fieldDelimiter="|" name="Ship" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/Ship/Account" containerType="SINGLE" label="Account" name="Account" type="string"/>
+<Field __sourcePath="{}/Ship/Quote" containerType="SINGLE" label="Quote" name="Quote" type="string"/>
+<Field __sourcePath="{}/Ship/Type" containerType="SINGLE" label="Type" name="Type" type="string"/>
+<Field __sourcePath="{}/Ship/Length" containerType="SINGLE" label="Length" name="Length" type="decimal"/>
+<Field __sourcePath="{}/Ship/Width" containerType="SINGLE" label="Width" name="Width" type="decimal"/>
+<Field __sourcePath="{}/Ship/Height" containerType="SINGLE" label="Height" name="Height" type="decimal"/>
+<Field __sourcePath="{}/Ship/To" containerType="SINGLE" label="To" name="To" type="string"/>
+<Field __sourcePath="{}/Ship/From" containerType="SINGLE" label="From" name="From" type="string"/>
+<Field __sourcePath="{}/Ship/Priority" containerType="SINGLE" label="Priority" name="Priority" type="string"/>
+<Field __sourcePath="{}/Ship/Declaration" containerType="SINGLE" label="Declaration" name="Declaration" type="string"/>
+<Field __sourcePath="{}/Ship/DeclaredValue" containerType="SINGLE" label="DeclaredValue" name="DeclaredValue" type="decimal"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Shipment" _dataStructure="OBJECT" _id="__id" _type="Input" id="3e038077-8325-4e8d-b9d9-d3a6be3aaff6">
+<Record fieldDelimiter="|" name="Shipment" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/Shipment/account_number" containerType="SINGLE" label="account_number" name="account_number" type="string"/>
+<Field __sourcePath="{}/Shipment/customs_declaration" containerType="SINGLE" label="customs_declaration" name="customs_declaration" type="string"/>
+<Field __sourcePath="{}/Shipment/customs_declared_value" containerType="SINGLE" label="customs_declared_value" name="customs_declared_value" type="string"/>
+<Field __sourcePath="{}/Shipment/destination" containerType="SINGLE" label="destination" name="destination" type="string"/>
+<Field __sourcePath="{}/Shipment/height" containerType="SINGLE" label="height" name="height" type="string"/>
+<Field __sourcePath="{}/Shipment/length" containerType="SINGLE" label="length" name="length" type="string"/>
+<Field __sourcePath="{}/Shipment/object" containerType="SINGLE" label="object" name="object" type="string"/>
+<Field __sourcePath="{}/Shipment/origin" containerType="SINGLE" label="origin" name="origin" type="string"/>
+<Field __sourcePath="{}/Shipment/quote_id" containerType="SINGLE" label="quote_id" name="quote_id" type="string"/>
+<Field __sourcePath="{}/Shipment/service" containerType="SINGLE" label="service" name="service" type="string"/>
+<Field __sourcePath="{}/Shipment/weight" containerType="SINGLE" label="weight" name="weight" type="string"/>
+<Field __sourcePath="{}/Shipment/width" containerType="SINGLE" label="width" name="width" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiName="Map&lt;k,v&gt; READER" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="account_number" trim="true" xpath="account_number"/>
+  <Mapping cloverField="customs_declaration" trim="true" xpath="customs_declaration"/>
+  <Mapping cloverField="customs_declared_value" trim="true" xpath="customs_declared_value"/>
+  <Mapping cloverField="destination" trim="true" xpath="destination"/>
+  <Mapping cloverField="height" trim="true" xpath="height"/>
+  <Mapping cloverField="length" trim="true" xpath="length"/>
+  <Mapping cloverField="object" trim="true" xpath="object"/>
+  <Mapping cloverField="origin" trim="true" xpath="origin"/>
+  <Mapping cloverField="quote_id" trim="true" xpath="quote_id"/>
+  <Mapping cloverField="service" trim="true" xpath="service"/>
+  <Mapping cloverField="weight" trim="true" xpath="weight"/>
+  <Mapping cloverField="width" trim="true" xpath="width"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[MAP]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="XML WRITER" guiX="900" guiY="20" id="EXT_XML_WRITER0" type="EXT_XML_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<Ship xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <Account>$0.Account</Account>
+  <Quote>$0.Quote</Quote>
+  <Type>$0.Type</Type>
+  <Length>$0.Length</Length>
+  <Width>$0.Width</Width>
+  <Height>$0.Height</Height>
+  <To>$0.To</To>
+  <From>$0.From</From>
+  <Priority>$0.Priority</Priority>
+  <Declaration>$0.Declaration</Declaration>
+  <DeclaredValue>$0.DeclaredValue</DeclaredValue>
+</Ship>]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+<attr name="cacheInMemory"><![CDATA[true]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'Shipment' -&gt; 'Ship'" guiX="460" guiY="20" id="FOREACH_SHIPMENT_SHIP" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.Height = (isnull(input.height) ? null : str2decimal(input.height));
+output.Length = (isnull(input.length) ? null : str2decimal(input.length));
+output.Width = (isnull(input.width) ? null : str2decimal(input.width));
+output.Quote = input.quote_id;
+output.Account = input.account_number;
+output.Type = input.object;
+output.To = input.destination;
+output.From = input.origin;
+output.Priority = input.service;
+output.Declaration = input.customs_declaration;
+output.DeclaredValue = (isnull(input.customs_declared_value) ? null : str2decimal(input.customs_declared_value));]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="3e038077-8325-4e8d-b9d9-d3a6be3aaff6" outPort="Port 0 (out)" toNode="FOREACH_SHIPMENT_SHIP:0"/>
+<Edge debugMode="true" fromNode="FOREACH_SHIPMENT_SHIP:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="ed89c4d4-7d8d-4ef5-9f91-0f87d6ab8292" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+</Phase>
+</Graph>

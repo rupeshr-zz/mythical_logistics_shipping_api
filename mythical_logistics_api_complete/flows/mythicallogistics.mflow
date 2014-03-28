@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="mythicallogistics">
+    <global-element name="Router" type="http://www.mulesoft.org/schema/mule/apikit/config" entity-id="Router#1">
+        <properties>
+            <property name="consoleEnabled" value="true"/>
+            <property name="raml" value="mythicallogistics.raml"/>
+            <property name="flow-mapping"/>
+            <property name="consolePath" value="console"/>
+            <property name="name" value="apiConfig"/>
+            <property name="auxiliary;index" value="1"/>
+        </properties>
+    </global-element>
+    <global-unknown description="false" unknownName="apiKitGlobalExceptionMapping" index="2" entity-id="global-unknown#1">
+        <content>&lt;apikit:mapping-exception-strategy xmlns:apikit=&quot;http://www.mulesoft.org/schema/mule/apikit&quot; name=&quot;apiKitGlobalExceptionMapping&quot;&gt;
+        &lt;apikit:mapping statusCode=&quot;404&quot;&gt;
+            &lt;apikit:exception value=&quot;org.mule.module.apikit.exception.NotFoundException&quot;/&gt;
+            &lt;set-property xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; propertyName=&quot;Content-Type&quot; value=&quot;application/json&quot;/&gt;
+            &lt;set-payload xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; value=&quot;{ &amp;quot;message&amp;quot;: &amp;quot;Resource not found&amp;quot; }&quot;/&gt;
+        &lt;/apikit:mapping&gt;
+        &lt;apikit:mapping statusCode=&quot;405&quot;&gt;
+            &lt;apikit:exception value=&quot;org.mule.module.apikit.exception.MethodNotAllowedException&quot;/&gt;
+            &lt;set-property xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; propertyName=&quot;Content-Type&quot; value=&quot;application/json&quot;/&gt;
+            &lt;set-payload xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; value=&quot;{ &amp;quot;message&amp;quot;: &amp;quot;Method not allowed&amp;quot; }&quot;/&gt;
+        &lt;/apikit:mapping&gt;
+        &lt;apikit:mapping statusCode=&quot;415&quot;&gt;
+            &lt;apikit:exception value=&quot;org.mule.module.apikit.exception.UnsupportedMediaTypeException&quot;/&gt;
+            &lt;set-property xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; propertyName=&quot;Content-Type&quot; value=&quot;application/json&quot;/&gt;
+            &lt;set-payload xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; value=&quot;{ &amp;quot;message&amp;quot;: &amp;quot;Unsupported media type&amp;quot; }&quot;/&gt;
+        &lt;/apikit:mapping&gt;
+        &lt;apikit:mapping statusCode=&quot;406&quot;&gt;
+            &lt;apikit:exception value=&quot;org.mule.module.apikit.exception.NotAcceptableException&quot;/&gt;
+            &lt;set-property xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; propertyName=&quot;Content-Type&quot; value=&quot;application/json&quot;/&gt;
+            &lt;set-payload xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; value=&quot;{ &amp;quot;message&amp;quot;: &amp;quot;Not acceptable&amp;quot; }&quot;/&gt;
+        &lt;/apikit:mapping&gt;
+        &lt;apikit:mapping statusCode=&quot;400&quot;&gt;
+            &lt;apikit:exception value=&quot;org.mule.module.apikit.exception.BadRequestException&quot;/&gt;
+            &lt;set-property xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; propertyName=&quot;Content-Type&quot; value=&quot;application/json&quot;/&gt;
+            &lt;set-payload xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; value=&quot;{ &amp;quot;message&amp;quot;: &amp;quot;Bad request&amp;quot; }&quot;/&gt;
+        &lt;/apikit:mapping&gt;
+    &lt;/apikit:mapping-exception-strategy&gt;</content>
+    </global-unknown>
+    <global-element name="new_mapping_grf" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" entity-id="!!!f3f23b2c-8d4c-4b43-bae2-5359bb2f9c50">
+        <properties>
+            <property name="doc:description"/>
+            <property name="name" value="new_mapping_grf"/>
+            <property name="doc:name" value="new_mapping_grf"/>
+            <property name="transformationGraphPath" value="new_mapping.grf"/>
+        </properties>
+    </global-element>
+    <global-element name="new_mapping_1_grf" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" entity-id="!!!d152f63b-defb-4482-8cca-2883bb40da6a">
+        <properties>
+            <property name="doc:description"/>
+            <property name="name" value="new_mapping_1_grf"/>
+            <property name="doc:name" value="new_mapping_1_grf"/>
+            <property name="transformationGraphPath" value="new_mapping_1.grf"/>
+        </properties>
+    </global-element>
+    <global-element name="new_mapping_2_grf" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" entity-id="!!!ed95ce92-2cd9-4454-9cca-9c5e823aaaf4">
+        <properties>
+            <property name="doc:description"/>
+            <property name="doc:name" value="new_mapping_2_grf"/>
+            <property name="name" value="new_mapping_2_grf"/>
+            <property name="transformationGraphPath" value="new_mapping_2.grf"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="main" entity-id="d804c03c-b284-419d-b8be-5ddd1b75b5e5">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="initialState"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="23"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port"/>
+                    <property name="host"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address" value="http://localhost:8081/api/b2bshipping/1.0"/>
+                    <property name="path"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="auxiliary;index" value="24"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="APIkit Router" type="http://www.mulesoft.org/schema/mule/apikit/router" entity-id="APIkit Router#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="config-ref" value="apiConfig"/>
+                    <property name="auxiliary;index" value="25"/>
+                </properties>
+            </pattern>
+            <pattern name="Reference Exception Strategy" type="http://www.mulesoft.org/schema/mule/core/exception-strategy" entity-id="Reference Exception Strategy#1">
+                <properties>
+                    <property name="ref" value="apiKitGlobalExceptionMapping"/>
+                    <property name="auxiliary;index" value="26"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="get:/quote:apiConfig" entity-id="0bf07f18-d0e7-4cfb-96ac-a1ddab03c7bd">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="initialState"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="27"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                <graphicalData x="19" y="393" width="68" height="67"/>
+                <properties>
+                    <property name="message" value="Get-Quote received request: #[payload]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="28"/>
+                </properties>
+            </pattern>
+            <splitter index="0" name="All" type="http://www.mulesoft.org/schema/mule/core/all" entity-id="a1011195-1251-4ae7-9dd9-a9fa3b851692">
+                <graphicalData x="147" y="330" width="411" height="193"/>
+                <properties>
+                    <property name=";INDEX" value="0"/>
+                </properties>
+                <description></description>
+                <pattern name="All" type="http://www.mulesoft.org/schema/mule/core/all" entity-id="8c6c704f-f9e7-4305-85ad-5b72d62800c0">
+                    <properties>
+                        <property name=";INDEX" value="0"/>
+                    </properties>
+                </pattern>
+                <compartment entity-id="e182d3f4-cece-4713-8ad4-818745e1bbad">
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="166f7e6f-bb1d-42a6-af6c-900dc9677946">
+                        <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="Google geocode API" type="http://www.mulesoft.org/schema/mule/https/endpoint" entity-id="0bf1adc5-2424-4caf-95da-8ad7c3f02a2c">
+                            <graphicalData x="507" y="361" width="121" height="67"/>
+                            <properties>
+<property name="auxiliary;erased;mimeType" value="true"/>
+<property name="port" value="8081"/>
+<property name="auxiliary;erased;host" value="true"/>
+<property name="contentType" value=""/>
+<property name="password" value=""/>
+<property name="exchange-pattern" value="request-response"/>
+<property name="tracking:enable-default-events" value="false"/>
+<property name="updated"/>
+<property name="auxiliary;erased;encoding" value="true"/>
+<property name="encoding" value=""/>
+<property name="path" value=""/>
+<property name="responseTransformer-refs" value=""/>
+<property name="responseTimeout" value="10000"/>
+<property name="mimeType" value=""/>
+<property name="auxiliary;erased;contentType" value="true"/>
+<property name="host" value=""/>
+<property name="businessEventsLabel" value=""/>
+<property name="followRedirects" value="false"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+<property name="keep-alive" value="false"/>
+<property name="disableTransportTransformer" value="false"/>
+<property name="ref" value=""/>
+<property name="httpLabel" value=""/>
+<property name="transformer-refs" value=""/>
+<property name="address" value="http://maps.googleapis.com/maps/api/geocode/json?latlng=#[payload.coordinates]&amp;sensor=false"/>
+<property name="method" value="POST"/>
+<property name="user" value=""/>
+<property name="connector-ref" value=""/>
+                            </properties>
+                            <description></description>
+                        </endpoint>
+                        <pattern name="Address" type="http://www.mulesoft.org/schema/mule/core/variable-transformer" entity-id="e89fc463-3513-4b0a-8e27-b2dc05b583f8">
+                            <graphicalData x="688" y="361" width="68" height="67"/>
+                            <properties>
+<property name="variableName" value="Address"/>
+<property name="updated"/>
+<property name="value" value="#[payload.address]"/>
+<property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/core/set-variable"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                    <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="c94f03a8-d4fc-48b6-8c9e-c6531d0c74dd">
+                        <pattern name="DataMapper" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" entity-id="62219604-fc5d-488f-a20e-8b7e8bd10f50">
+                            <graphicalData x="0" y="0" width="0" height="0"/>
+                            <properties>
+<property name="config-ref" value="new_mapping_2_grf"/>
+<property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-arguments;1880647414">
+    <property name="isProcessed$$$$" value="true"/>
+    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-argument;1376770552">
+        <property name="value" value="#[address]"/>
+        <property name="isProcessed$$$$" value="true"/>
+        <property name="key" value="Address"/>
+    </property-collection>
+</property-collection>
+                            </properties>
+                        </pattern>
+                        <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="RateFinder API" type="http://www.mulesoft.org/schema/mule/https/endpoint" entity-id="f911a1d2-336b-47a2-be9e-3e28a05136d4">
+                            <graphicalData x="295" y="434" width="92" height="67"/>
+                            <properties>
+<property name="exchange-pattern" value="request-response"/>
+                            </properties>
+                            <description></description>
+                        </endpoint>
+                        <pattern name="Quote Event" type="http://www.mulesoft.org/schema/mule/ee/tracking/custom-event" entity-id="Custom Business event#1">
+                            <graphicalData x="447" y="438" width="79" height="59"/>
+                            <properties>
+<property name="event-name" value="Quote"/>
+<property name="auxiliary;moved-from" value="35"/>
+<property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;0">
+    <property name="value" value="#[payload.quote_id]"/>
+    <property name="isProcessed$$$$" value="true"/>
+    <property name="key" value="Quote Number"/>
+    <property name="auxiliary;index" value="36"/>
+    <property name="auxiliary;wrapIn" value="36"/>
+</property-collection>
+<property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;1">
+    <property name="value" value="#[payload.amount]"/>
+    <property name="isProcessed$$$$" value="true"/>
+    <property name="key" value="Quote Amount"/>
+    <property name="auxiliary;index" value="37"/>
+    <property name="auxiliary;wrapIn" value="37"/>
+</property-collection>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </splitter>
+            <pattern name="Set Payload" type="http://www.mulesoft.org/schema/mule/core/set-payload" entity-id="Set Payload#1">
+                <graphicalData x="618" y="393" width="75" height="67"/>
+                <properties>
+                    <property name="value" value="{&#xA;    &quot;quote_id&quot;: &quot;quotWDv2VzHp&quot;,&#xA;    &quot;created_at&quot;: &quot;2013-04-22T05:40:57Z&quot;,&#xA;    &quot;currency&quot;: &quot;USD&quot;,&#xA;    &quot;amount&quot;: 23.34&#xA;}"/>
+                    <property name="auxiliary;index" value="33"/>
+                </properties>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="get:/shipment/{shipment_id}:apiConfig" entity-id="d0ddc828-9fbd-41be-8851-17a68f8a8db9">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="initialState"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="38"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#3">
+            <graphicalData x="14" y="594" width="374" height="85"/>
+            <pattern name="Map to XML" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" entity-id="58a9299c-4482-4832-8142-16441e03619b">
+                <graphicalData x="19" y="599" width="79" height="67"/>
+                <properties>
+                    <property name="config-ref" value="new_mapping_grf"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="Tracking Service" type="http://www.mulesoft.org/schema/mule/https/endpoint" entity-id="f95bcc7b-4791-426e-8649-948d3659d405">
+                <graphicalData x="158" y="599" width="108" height="67"/>
+                <properties>
+                    <property name="auxiliary;erased;mimeType" value="true"/>
+                    <property name="port" value="8081"/>
+                    <property name="contentType" value=""/>
+                    <property name="password" value=""/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events" value="false"/>
+                    <property name="updated"/>
+                    <property name="auxiliary;erased;encoding" value="true"/>
+                    <property name="encoding" value=""/>
+                    <property name="path" value="track"/>
+                    <property name="responseTransformer-refs" value=""/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="mimeType" value=""/>
+                    <property name="auxiliary;erased;contentType" value="true"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel" value=""/>
+                    <property name="followRedirects" value="false"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive" value="false"/>
+                    <property name="disableTransportTransformer" value="false"/>
+                    <property name="ref" value=""/>
+                    <property name="httpLabel" value=""/>
+                    <property name="transformer-refs" value=""/>
+                    <property name="address" value=""/>
+                    <property name="method" value="POST"/>
+                    <property name="user" value=""/>
+                    <property name="connector-ref" value=""/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern name="Track Event" type="http://www.mulesoft.org/schema/mule/ee/tracking/custom-event" entity-id="Custom Business event#2">
+                <graphicalData x="454" y="603" width="76" height="59"/>
+                <properties>
+                    <property name="event-name" value="Tracking request received"/>
+                    <property name="auxiliary;moved-from" value="41"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;0">
+                        <property name="value" value="#[payload.tracking_number]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Tracking Number"/>
+                        <property name="auxiliary;index" value="42"/>
+                        <property name="auxiliary;wrapIn" value="42"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;1">
+                        <property name="value" value="#[payload.status]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Shipment Status"/>
+                        <property name="auxiliary;index" value="43"/>
+                        <property name="auxiliary;wrapIn" value="43"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern name="Set Payload" type="http://www.mulesoft.org/schema/mule/core/set-payload" entity-id="Set Payload#2">
+                <graphicalData x="590" y="599" width="75" height="67"/>
+                <properties>
+                    <property name="value" value="{&#xA;  &quot;tracking_number&quot;: &quot;34183941734713048&quot;,&#xA;  &quot;created_at&quot;: &quot;2013-04-22T05:40:57Z&quot;,&#xA;  &quot;pickup_time&quot;: &quot;2013-04-23T09:30:00Z&quot;,&#xA;  &quot;status&quot;: &quot;delivered&quot;,&#xA;  &quot;scan_form&quot;: &quot;sf_m4WmYiew&quot;&#xA;}"/>
+                    <property name="auxiliary;index" value="39"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="post:/shipment:apiConfig" entity-id="7812db31-e983-482c-8a91-774f715c17af">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="initialState"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="44"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <pattern name="JSON to Object" type="http://www.mulesoft.org/schema/mule/json/json-to-object-transformer" entity-id="JSON to Object#3">
+                <graphicalData x="19" y="750" width="93" height="67"/>
+                <properties>
+                    <property name="returnClass" value="java.util.HashMap"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="45"/>
+                    <property name="mimeType"/>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern name="Ship Event" type="http://www.mulesoft.org/schema/mule/ee/tracking/custom-event" entity-id="Custom Business event#3">
+                <graphicalData x="172" y="754" width="70" height="59"/>
+                <properties>
+                    <property name="event-name" value="Received request to Ship"/>
+                    <property name="auxiliary;index" value="46"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;0">
+                        <property name="value" value="#[payload.quote_id]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Quote Number"/>
+                        <property name="auxiliary;index" value="47"/>
+                        <property name="auxiliary;wrapIn" value="47"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;1">
+                        <property name="value" value="#[payload.destination]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Destination"/>
+                        <property name="auxiliary;index" value="48"/>
+                        <property name="auxiliary;wrapIn" value="48"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;2">
+                        <property name="value" value="#[payload.origin]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Origin"/>
+                        <property name="auxiliary;index" value="49"/>
+                        <property name="auxiliary;wrapIn" value="49"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;3">
+                        <property name="value" value="#[payload.service]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Service Requested"/>
+                        <property name="auxiliary;index" value="50"/>
+                        <property name="auxiliary;wrapIn" value="50"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/meta-data;4">
+                        <property name="value" value="#[payload.account_number]"/>
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="key" value="Account Number"/>
+                        <property name="auxiliary;index" value="51"/>
+                        <property name="auxiliary;wrapIn" value="51"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <pattern name="Map to XML" type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" entity-id="f5d0ec47-aa43-425b-b04b-22f62c5e4ab7">
+                <graphicalData x="302" y="750" width="79" height="67"/>
+                <properties>
+                    <property name="config-ref" value="new_mapping_1_grf"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="Ship Service" type="http://www.mulesoft.org/schema/mule/https/endpoint" entity-id="11aa745b-2c6b-4b0b-8478-502ac59bed91">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="exchange-pattern" value="request-response"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern name="Set Payload" type="http://www.mulesoft.org/schema/mule/core/set-payload" entity-id="Set Payload#3">
+                <graphicalData x="441" y="750" width="75" height="67"/>
+                <properties>
+                    <property name="value" value="{&#xA;  &quot;shipment_id&quot;: &quot;prclWDv2VzHp&quot;,&#xA;  &quot;tracking_number&quot;: &quot;34183941734713048&quot;,&#xA;  &quot;created_at&quot;: &quot;2013-04-22T05:40:57Z&quot;,&#xA;  &quot;pickup_time&quot;: &quot;2013-04-23T09:30:00Z&quot;&#xA;  &quot;scan_form&quot;: &quot;sf_m4WmYiew&quot;&#xA;}"/>
+                    <property name="auxiliary;index" value="52"/>
+                </properties>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:sap="http://www.mulesoft.org/schema/mule/sap" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd" version="EE-3.4.1">
+    <apikit:config name="apiConfig" raml="mythicallogistics.raml" consoleEnabled="true" consolePath="console" doc:name="Router"/>
+    <apikit:mapping-exception-strategy name="apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" />
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" />
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" />
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+    <data-mapper:config name="new_mapping_grf" transformationGraphPath="new_mapping.grf" doc:name="new_mapping_grf"/>
+    <data-mapper:config name="new_mapping_1_grf" transformationGraphPath="new_mapping_1.grf" doc:name="new_mapping_1_grf"/>
+    <data-mapper:config name="new_mapping_2_grf" transformationGraphPath="new_mapping_2.grf" doc:name="new_mapping_2_grf"/>
+    <flow name="main" doc:name="main">
+        <http:inbound-endpoint address="http://localhost:8081/api/b2bshipping/1.0" doc:name="HTTP" exchange-pattern="request-response"/>
+        <apikit:router config-ref="apiConfig" doc:name="APIkit Router"/>
+        <exception-strategy ref="apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="get:/quote:apiConfig" doc:name="get:/quote:apiConfig">
+        <logger message="Get-Quote received request: #[payload]" level="INFO" doc:name="Logger"/>
+        <all doc:name="All">
+            <processor-chain>
+                <http:outbound-endpoint exchange-pattern="request-response" method="POST" address="http://maps.googleapis.com/maps/api/geocode/json?latlng=#[payload.coordinates]&amp;sensor=false" doc:name="Google geocode API"/>
+                <set-variable variableName="Address" value="#[payload.address]" doc:name="Address"/>
+            </processor-chain>
+            <processor-chain>
+                <data-mapper:transform config-ref="new_mapping_2_grf" doc:name="DataMapper">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="Address">#[address]</data-mapper:input-argument>
+                    </data-mapper:input-arguments>
+                </data-mapper:transform>
+                <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" method="POST" doc:name="RateFinder API"/>
+                <tracking:custom-event event-name="Quote" doc:name="Quote Event">
+                    <tracking:meta-data key="Quote Number" value="#[payload.quote_id]"/>
+                    <tracking:meta-data key="Quote Amount" value="#[payload.amount]"/>
+                </tracking:custom-event>
+            </processor-chain>
+        </all>
+        <set-payload value="{
+    &quot;quote_id&quot;: &quot;quotWDv2VzHp&quot;,
+    &quot;created_at&quot;: &quot;2013-04-22T05:40:57Z&quot;,
+    &quot;currency&quot;: &quot;USD&quot;,
+    &quot;amount&quot;: 23.34
+}" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/shipment/{shipment_id}:apiConfig" doc:name="get:/shipment/{shipment_id}:apiConfig">
+        <data-mapper:transform config-ref="new_mapping_grf" doc:name="Map to XML"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="track" method="POST" doc:name="Tracking Service"/>
+        <tracking:custom-event event-name="Tracking request received" doc:name="Track Event">
+            <tracking:meta-data key="Tracking Number" value="#[payload.tracking_number]"/>
+            <tracking:meta-data key="Shipment Status" value="#[payload.status]"/>
+        </tracking:custom-event>
+        <set-payload value="{
+  &quot;tracking_number&quot;: &quot;34183941734713048&quot;,
+  &quot;created_at&quot;: &quot;2013-04-22T05:40:57Z&quot;,
+  &quot;pickup_time&quot;: &quot;2013-04-23T09:30:00Z&quot;,
+  &quot;status&quot;: &quot;delivered&quot;,
+  &quot;scan_form&quot;: &quot;sf_m4WmYiew&quot;
+}" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/shipment:apiConfig" doc:name="post:/shipment:apiConfig">
+        <json:json-to-object-transformer doc:name="JSON to Object" returnClass="java.util.HashMap"/>
+        <tracking:custom-event event-name="Received request to Ship" doc:name="Ship Event">
+            <tracking:meta-data key="Quote Number" value="#[payload.quote_id]"/>
+            <tracking:meta-data key="Destination" value="#[payload.destination]"/>
+            <tracking:meta-data key="Origin" value="#[payload.origin]"/>
+            <tracking:meta-data key="Service Requested" value="#[payload.service]"/>
+            <tracking:meta-data key="Account Number" value="#[payload.account_number]"/>
+        </tracking:custom-event>
+        <data-mapper:transform config-ref="new_mapping_1_grf" doc:name="Map to XML"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" method="POST" doc:name="Ship Service"/>
+        <set-payload value="{&#xA;  &quot;shipment_id&quot;: &quot;prclWDv2VzHp&quot;,&#xA;  &quot;tracking_number&quot;: &quot;34183941734713048&quot;,&#xA;  &quot;created_at&quot;: &quot;2013-04-22T05:40:57Z&quot;,&#xA;  &quot;pickup_time&quot;: &quot;2013-04-23T09:30:00Z&quot;&#xA;  &quot;scan_form&quot;: &quot;sf_m4WmYiew&quot;&#xA;}" doc:name="Set Payload"/>
+    </flow>
+</mule>

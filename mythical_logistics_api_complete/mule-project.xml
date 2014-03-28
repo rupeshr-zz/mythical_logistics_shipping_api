@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.4.1.ee" schemaVersion="3.5.0.0">
+    <name>Mythical_Logistics_API</name>
+    <description></description>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit"/>
+    <muleExtension name="Salesforce" qualifier="org.mule.tooling.ui.contribution.sfdc"/>
+    <muleExtension name="SAP" qualifier="org.mule.tooling.ui.contribution.sap"/>
+    <muleExtension name="HDFS" qualifier="org.mule.tooling.ui.contribution.hdfs"/>
+</mule-project>

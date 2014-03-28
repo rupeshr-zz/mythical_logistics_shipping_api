@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph author="rupesh" created="Thu Dec 12 00:02:20 PST 2013" guiVersion="3.4.0.P" id="1388766364858" licenseCode="Unlicensed" licenseType="Unknown" modified="Thu Dec 12 00:02:20 PST 2013" modifiedBy="rupesh" name="new_mapping_2_grf" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/RateFinder" _dataStructure="OBJECT" _id="__id" _type="Output" id="64c97b53-25b0-40d9-a5cd-059e9b60e7f7">
+<Record fieldDelimiter="|" name="RateFinder" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/RateFinder/Destination" containerType="SINGLE" label="Destination" name="Destination" type="string"/>
+<Field __sourcePath="{}/RateFinder/Origin" containerType="SINGLE" label="Origin" name="Origin" type="string"/>
+<Field __sourcePath="{}/RateFinder/Service_x0020Type" containerType="SINGLE" label="Service Type" name="Service_Type" type="string"/>
+<Field __sourcePath="{}/RateFinder/Volume" containerType="SINGLE" label="Volume" name="Volume" type="string"/>
+<Field __sourcePath="{}/RateFinder/Weight" containerType="SINGLE" label="Weight" name="Weight" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/ShippingQuote" _dataStructure="OBJECT" _id="__id" _type="Input" id="8de9add4-44f1-40d7-8736-dc9690346151">
+<Record fieldDelimiter="|" name="ShippingQuote" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/Destination_x0020Port" containerType="SINGLE" label="Destination Port" name="Destination_Port" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/GPS_x0020Co-ordinates" containerType="SINGLE" label="GPS Co-ordinates" name="GPS_Co_ordinates" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/Originating_x0020Port" containerType="SINGLE" label="Originating Port" name="Originating_Port" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/Packaging" containerType="SINGLE" label="Packaging" name="Packaging" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/Service_x0020Type" containerType="SINGLE" label="Service Type" name="Service_Type" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/Volume_x0020in_x0020Cubic_x0020Feet" containerType="SINGLE" label="Volume in Cubic Feet" name="Volume_in_Cubic_Feet" type="string"/>
+<Field __sourcePath="{}/ShippingQuote/Weight_x0020in_x0020pounds" containerType="SINGLE" label="Weight in pounds" name="Weight_in_pounds" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry2" input="true" name="Address" output="true" type="string"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiName="Map&lt;k,v&gt; READER" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="Destination_Port" trim="true" xpath="Destination_x0020Port"/>
+  <Mapping cloverField="GPS_Co_ordinates" trim="true" xpath="GPS_x0020Co-ordinates"/>
+  <Mapping cloverField="Originating_Port" trim="true" xpath="Originating_x0020Port"/>
+  <Mapping cloverField="Packaging" trim="true" xpath="Packaging"/>
+  <Mapping cloverField="Service_Type" trim="true" xpath="Service_x0020Type"/>
+  <Mapping cloverField="Volume_in_Cubic_Feet" trim="true" xpath="Volume_x0020in_x0020Cubic_x0020Feet"/>
+  <Mapping cloverField="Weight_in_pounds" trim="true" xpath="Weight_x0020in_x0020pounds"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[MAP]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'ShippingQuote' -&gt; 'RateFinder'" guiX="460" guiY="20" id="FOREACH_SHIPPING_QUOTE_RATE_FINDER" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.Service_Type = input.Service_Type;
+output.Origin = inputArguments.Address;
+output.Destination = input.Destination_Port;
+output.Volume = input.Volume_in_Cubic_Feet + input.Service_Type;
+output.Weight = input.Weight_in_pounds;]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="JSON WRITER" guiX="900" guiY="20" id="JSON_WRITER0" type="JSON_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<RateFinder xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <Destination>$0.Destination</Destination>
+  <Origin>$0.Origin</Origin>
+  <clover:element clover:name="Service Type">$0.Service_Type</clover:element>
+  <Volume>$0.Volume</Volume>
+  <Weight>$0.Weight</Weight>
+</RateFinder>]]></attr>
+<attr name="_data_format"><![CDATA[JSON]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="8de9add4-44f1-40d7-8736-dc9690346151" outPort="Port 0 (out)" toNode="FOREACH_SHIPPING_QUOTE_RATE_FINDER:0"/>
+<Edge debugMode="true" fromNode="FOREACH_SHIPPING_QUOTE_RATE_FINDER:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="64c97b53-25b0-40d9-a5cd-059e9b60e7f7" outPort="Port 0 (out)" toNode="JSON_WRITER0:0"/>
+</Phase>
+</Graph>
